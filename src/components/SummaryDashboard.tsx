@@ -1,19 +1,21 @@
 import type {
   CategorySpending,
-  MileagePoint,
+  MileageEntry,
   YearlySpending,
 } from '../types'
 import { CATEGORY_LABELS } from '../constants/categoryColors'
 import { KpiCard } from './ui/KpiCard'
 import { formatCurrency, formatDateShort, formatMileage } from '../utils/formatters'
+import { cn } from '../utils/cn'
 
 interface SummaryDashboardProps {
   visitCount: number
   totalSpending: number
   dateRange: { from: string; to: string }
   yearlySpending: YearlySpending[]
-  mileagePoints: MileagePoint[]
+  mileageEntries: MileageEntry[]
   categorySpending: CategorySpending[]
+  onDateClick?: (date: string) => void
 }
 
 export function SummaryDashboard({
@@ -21,11 +23,14 @@ export function SummaryDashboard({
   totalSpending,
   dateRange,
   yearlySpending,
-  mileagePoints,
+  mileageEntries,
   categorySpending,
+  onDateClick,
 }: SummaryDashboardProps) {
   const maxYearAmount = Math.max(...yearlySpending.map((item) => item.amount), 1)
-  const latestMileage = mileagePoints.at(-1)
+  const entriesWithMileage = mileageEntries.filter((entry) => entry.mileage != null)
+  const entriesWithoutMileage = mileageEntries.filter((entry) => entry.mileage == null)
+  const latestMileage = entriesWithMileage.at(-1)
 
   return (
     <div className="space-y-6">
@@ -38,7 +43,7 @@ export function SummaryDashboard({
         <KpiCard title="Всего потрачено" value={formatCurrency(totalSpending)} />
         <KpiCard
           title="Последний пробег"
-          value={latestMileage ? formatMileage(latestMileage.mileage) : '—'}
+          value={latestMileage ? formatMileage(latestMileage.mileage!) : '—'}
           subtitle={latestMileage ? formatDateShort(latestMileage.date) : undefined}
         />
       </div>
@@ -64,21 +69,55 @@ export function SummaryDashboard({
       </section>
 
       <section className="rounded-xl border border-slate-200 bg-card p-4 shadow-sm md:p-5">
-        <h3 className="text-lg font-semibold text-slate-900">Пробег по визитам</h3>
-        {mileagePoints.length === 0 ? (
-          <p className="mt-3 text-sm text-muted">Данные о пробеге отсутствуют.</p>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <h3 className="text-lg font-semibold text-slate-900">Пробег по визитам</h3>
+          {entriesWithoutMileage.length > 0 && (
+            <p className="text-sm text-amber-700">
+              Без пробега: {entriesWithoutMileage.length} из {mileageEntries.length}
+            </p>
+          )}
+        </div>
+        {mileageEntries.length === 0 ? (
+          <p className="mt-3 text-sm text-muted">Нет визитов с заказ-нарядами.</p>
         ) : (
-          <ul className="mt-4 space-y-2">
-            {mileagePoints.map((point) => (
-              <li
-                key={`${point.date}-${point.mileage}`}
-                className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-sm"
-              >
-                <span>{formatDateShort(point.date)}</span>
-                <span className="font-medium text-slate-900">{formatMileage(point.mileage)}</span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <p className="mt-2 text-sm text-muted">
+              Нажмите на визит, чтобы открыть его в хронологии.
+            </p>
+            <ul className="mt-4 space-y-2">
+              {mileageEntries.map((entry) => {
+                const hasMileage = entry.mileage != null
+
+                return (
+                  <li key={entry.date}>
+                    <button
+                      type="button"
+                      onClick={() => onDateClick?.(entry.date)}
+                      className={cn(
+                        'flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors',
+                        hasMileage
+                          ? 'bg-slate-50 hover:bg-primary/10'
+                          : 'border border-amber-200 bg-amber-50 hover:bg-amber-100',
+                      )}
+                    >
+                      <span className="font-medium text-slate-800">
+                        {formatDateShort(entry.date)}
+                      </span>
+                      {hasMileage ? (
+                        <span className="font-medium text-slate-900">
+                          {formatMileage(entry.mileage!)}
+                        </span>
+                      ) : (
+                        <span className="rounded-full bg-amber-200/80 px-2 py-0.5 text-xs font-medium text-amber-900">
+                          Пробег не указан
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </>
         )}
       </section>
 

@@ -1,12 +1,26 @@
 import type { PartCategory } from '../types'
 
+const MOTOR_OIL_KEYWORDS = [
+  'масло',
+  '5w30',
+  '5w40',
+  'genesis',
+  'armortech',
+  'лукойл',
+  's-oil',
+  'ngn',
+]
+
 interface CategoryRule {
   category: PartCategory
   keywords: string[]
 }
 
 const CATEGORY_RULES: CategoryRule[] = [
-  { category: 'oil_fluids', keywords: ['масло', 'антифриз', 'cvt', 'охлаждающ', 'жидкость', 'coolant'] },
+  {
+    category: 'oil_fluids',
+    keywords: [...MOTOR_OIL_KEYWORDS, 'антифриз', 'cvt', 'охлаждающ', 'жидкость', 'coolant'],
+  },
   { category: 'filters', keywords: ['фильтр'] },
   {
     category: 'suspension',
@@ -35,7 +49,7 @@ const SUBTYPE_RULES: Array<{ label: string; keywords: string[] }> = [
   { label: 'Масляный фильтр', keywords: ['маслян', 'w 67', 'w67', 'c901', 'mo901'] },
   { label: 'Воздушный фильтр', keywords: ['воздушн', 'a2801'] },
   { label: 'Фильтр салона', keywords: ['салон', 'ac207', 'lac201', 'cu-1936', 'cu1936'] },
-  { label: 'Моторное масло', keywords: ['масло', '5w30', '5w40', 'genesis', 's-oil', 'ngn'] },
+  { label: 'Моторное масло', keywords: MOTOR_OIL_KEYWORDS },
   { label: 'Антифриз / охлаждающая жидкость', keywords: ['антифриз', 'coolant', 'охлаждающ'] },
   { label: 'Амортизатор передний', keywords: ['амортизатор', 'передн'] },
   { label: 'Амортизатор задний', keywords: ['амортизатор', 'задн'] },

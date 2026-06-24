@@ -5,7 +5,7 @@ import { buildPartHistory, groupDocumentsByDate } from '../utils/groupByDate'
 import { analyzeIntervals } from '../utils/intervalAnalysis'
 import {
   getCategorySpending,
-  getMileagePoints,
+  getMileageEntries,
   getOrganizationStats,
   getTotalSpending,
   getYearlySpending,
@@ -18,7 +18,7 @@ export function useServiceData() {
   const partHistory = useMemo(() => buildPartHistory(visits), [visits])
   const organizations = useMemo(() => getOrganizationStats(visits), [visits])
   const yearlySpending = useMemo(() => getYearlySpending(visits), [visits])
-  const mileagePoints = useMemo(() => getMileagePoints(data), [])
+  const mileageEntries = useMemo(() => getMileageEntries(visits), [visits])
   const categorySpending = useMemo(() => getCategorySpending(visits), [visits])
   const totalSpending = useMemo(() => getTotalSpending(visits), [visits])
   const intervalAnalysis = useMemo(() => analyzeIntervals(data), [])
@@ -41,7 +41,7 @@ export function useServiceData() {
     partHistory,
     organizations,
     yearlySpending,
-    mileagePoints,
+    mileageEntries,
     categorySpending,
     totalSpending,
     organizationsList,
@@ -68,6 +68,8 @@ export function filterVisits(
 
     const matchesSearch =
       !query ||
+      visit.date === query ||
+      visit.date.includes(query) ||
       visit.organizations.some((org) => org.toLowerCase().includes(query)) ||
       visit.works.some((work) => work.name.toLowerCase().includes(query)) ||
       visit.parts.some((part) => part.name.toLowerCase().includes(query)) ||

@@ -131,9 +131,9 @@ export interface YearlySpending {
   amount: number
 }
 
-export interface MileagePoint {
+export interface MileageEntry {
   date: string
-  mileage: number
+  mileage: number | null
 }
 
 export interface CategorySpending {

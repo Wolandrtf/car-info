@@ -1,7 +1,6 @@
 import type {
-  CarHistoryData,
   CategorySpending,
-  MileagePoint,
+  MileageEntry,
   OrganizationStats,
   PartCategory,
   ServiceVisit,
@@ -25,12 +24,12 @@ export function getYearlySpending(visits: ServiceVisit[]): YearlySpending[] {
     .sort((a, b) => a.year - b.year)
 }
 
-export function getMileagePoints(data: CarHistoryData): MileagePoint[] {
-  return data.documents
-    .filter((doc) => doc.type === 'work_order' && doc.mileage != null)
-    .map((doc) => ({
-      date: doc.date,
-      mileage: (doc as { mileage: number }).mileage,
+export function getMileageEntries(visits: ServiceVisit[]): MileageEntry[] {
+  return visits
+    .filter((visit) => visit.documents.some((doc) => doc.type === 'work_order'))
+    .map((visit) => ({
+      date: visit.date,
+      mileage: visit.mileage ?? null,
     }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 }

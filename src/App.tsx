@@ -26,6 +26,8 @@ function App() {
   const handleDateClick = (date: string) => {
     setActiveTab('timeline')
     setSearch(date)
+    setOrganization('')
+    setCategory('')
   }
 
   return (
@@ -74,8 +76,9 @@ function App() {
           totalSpending={data.totalSpending}
           dateRange={data.summary.date_range}
           yearlySpending={data.yearlySpending}
-          mileagePoints={data.mileagePoints}
+          mileageEntries={data.mileageEntries}
           categorySpending={data.categorySpending}
+          onDateClick={handleDateClick}
         />
       )}
     </AppLayout>
