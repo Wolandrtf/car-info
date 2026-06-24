@@ -143,4 +143,10 @@ export interface CategorySpending {
   count: number
 }
 
-export type TabId = 'timeline' | 'parts' | 'organizations' | 'summary' | 'intervals'
+export type TabId =
+  | 'timeline'
+  | 'parts'
+  | 'organizations'
+  | 'schedule'
+  | 'intervals'
+  | 'summary'

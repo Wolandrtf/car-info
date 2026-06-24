@@ -3,6 +3,7 @@ import carHistory from '../data/src.json'
 import type { ServiceVisit } from '../types'
 import { buildPartHistory, groupDocumentsByDate } from '../utils/groupByDate'
 import { analyzeIntervals } from '../utils/intervalAnalysis'
+import { computeMaintenanceSchedule, getLatestMileage } from '../utils/maintenanceSchedule'
 import {
   countPartsWithoutPrice,
   getCategorySpending,
@@ -25,6 +26,10 @@ export function useServiceData() {
   const partsWithoutPriceCount = useMemo(() => countPartsWithoutPrice(visits), [visits])
   const totalSpending = useMemo(() => getTotalSpending(visits), [visits])
   const intervalAnalysis = useMemo(() => analyzeIntervals(data), [])
+  const maintenanceSchedule = useMemo(
+    () => computeMaintenanceSchedule(intervalAnalysis.timelines, getLatestMileage(visits)),
+    [intervalAnalysis.timelines, visits],
+  )
 
   const organizationsList = useMemo(
     () => [...new Set(visits.flatMap((visit) => visit.organizations))].sort(),
@@ -50,6 +55,7 @@ export function useServiceData() {
     totalSpending,
     organizationsList,
     intervalAnalysis,
+    maintenanceSchedule,
   }
 }
 

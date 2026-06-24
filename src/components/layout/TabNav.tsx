@@ -11,6 +11,7 @@ const TABS: Array<{ id: TabId; label: string }> = [
   { id: 'timeline', label: 'Таймлайн' },
   { id: 'parts', label: 'Запчасти' },
   { id: 'organizations', label: 'Организации' },
+  { id: 'schedule', label: 'Регламент' },
   { id: 'intervals', label: 'Интервалы' },
   { id: 'summary', label: 'Сводка' },
 ]

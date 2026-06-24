@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AppLayout } from './components/layout/AppLayout'
 import { TabNav } from './components/layout/TabNav'
+import { MaintenanceScheduleSection } from './components/MaintenanceScheduleSection'
 import { IntervalAnalysisView } from './components/IntervalAnalysisView'
 import { OrganizationsView } from './components/OrganizationsView'
 import { PartsByCategory } from './components/PartsByCategory'
@@ -107,6 +108,16 @@ function App() {
         <OrganizationsView
           organizations={data.organizations}
           onDateClick={handleDateClick}
+        />
+      )}
+
+      {activeTab === 'schedule' && (
+        <MaintenanceScheduleSection
+          vehicleLabel={data.vehicle.make}
+          currentMileage={data.maintenanceSchedule.currentMileage}
+          items={data.maintenanceSchedule.items}
+          overdueCount={data.maintenanceSchedule.overdue.length}
+          dueSoonCount={data.maintenanceSchedule.dueSoon.length}
         />
       )}
 

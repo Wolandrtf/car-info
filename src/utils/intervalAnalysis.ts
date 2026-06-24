@@ -1,6 +1,6 @@
 import type { CarHistoryData, Document } from '../types'
 
-export type IntervalKind = 'planned' | 'wear'
+export type IntervalKind = 'planned' | 'wear' | 'critical'
 
 export type IntervalVerdict =
   | 'early_wear'
@@ -15,6 +15,7 @@ export interface MaintenanceInterval {
   normKm: number
   kind: IntervalKind
   keywords: string[]
+  recommendation: string
 }
 
 export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
@@ -24,6 +25,7 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 12000,
     kind: 'planned',
     keywords: ['масло в двс', 'масло двс', 'масляный фильтр'],
+    recommendation: 'Каждые 10–15 тыс. км или 1 раз в год (что наступит раньше)',
   },
   {
     id: 'air_filter',
@@ -31,6 +33,7 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 20000,
     kind: 'planned',
     keywords: ['воздушный фильтр', 'фильтр воздушный', 'a2801'],
+    recommendation: 'Каждые 20 тыс. км',
   },
   {
     id: 'cabin_filter',
@@ -38,6 +41,71 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 15000,
     kind: 'planned',
     keywords: ['фильтр вентиляции салона', 'фильтр салона', 'ac207', 'lac201', 'cu-1936'],
+    recommendation: 'Каждые 15 тыс. км или 1 раз в год',
+  },
+  {
+    id: 'spark_plugs',
+    label: 'Свечи зажигания',
+    normKm: 60000,
+    kind: 'planned',
+    keywords: ['свеч', 'свечи зажигания', 'свеча зажигания', 'ngk', 'denso', 'iridium'],
+    recommendation: 'Каждые 60 тыс. км (иридиевые) или 30 тыс. км (обычные)',
+  },
+  {
+    id: 'cvt_oil',
+    label: 'Масло вариатора (CVT)',
+    normKm: 45000,
+    kind: 'critical',
+    keywords: [
+      'масло вариатор',
+      'масло cvt',
+      'cvt ns-2',
+      'cvt ns2',
+      'ns-2',
+      'жидкость вариатора',
+      'вариатор nissan',
+    ],
+    recommendation: 'Каждые 40–50 тыс. км — критично для ресурса CVT',
+  },
+  {
+    id: 'timing_belt',
+    label: 'Ремень ГРМ + ролики',
+    normKm: 100000,
+    kind: 'critical',
+    keywords: [
+      'ремень грм',
+      'ремня грм',
+      'грм',
+      'газораспределительный механизм',
+      'комплект грм',
+      'ролик грм',
+      'натяжитель грм',
+    ],
+    recommendation: 'Каждые 100 тыс. км или 5 лет — обрыв ремня губителен для двигателя',
+  },
+  {
+    id: 'throttle_body',
+    label: 'Дроссельная заслонка',
+    normKm: 60000,
+    kind: 'planned',
+    keywords: ['дроссель', 'дроссельн', 'заслонк'],
+    recommendation: 'Промывка/чистка каждые 60 тыс. км или при нестабильном холостом ходу',
+  },
+  {
+    id: 'fuel_filter',
+    label: 'Топливный фильтр',
+    normKm: 60000,
+    kind: 'planned',
+    keywords: ['топливный фильтр', 'фильтр топливный', 'прокладка топливного фильтра'],
+    recommendation: 'Каждые 60 тыс. км',
+  },
+  {
+    id: 'coolant',
+    label: 'Антифриз (замена)',
+    normKm: 60000,
+    kind: 'planned',
+    keywords: ['антифриз - замена', 'антифриз замена', 'замена антифриз', 'охлаждающей жидкости'],
+    recommendation: 'Каждые 60 тыс. км или раз в 3 года',
   },
   {
     id: 'brake_pads_front',
@@ -45,6 +113,7 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 40000,
     kind: 'wear',
     keywords: ['колодки торм. передние', 'колодки тормозные передние', 'колодки тормозные дисковые'],
+    recommendation: 'По износу, ориентир 30–50 тыс. км',
   },
   {
     id: 'brake_pads_rear',
@@ -52,6 +121,31 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 50000,
     kind: 'wear',
     keywords: ['колодки торм. задние', 'колодки задние'],
+    recommendation: 'По износу, ориентир 40–60 тыс. км',
+  },
+  {
+    id: 'brake_discs',
+    label: 'Тормозные диски',
+    normKm: 80000,
+    kind: 'wear',
+    keywords: ['тормозной диск', 'диск тормоз', 'диски тормоз'],
+    recommendation: 'По износу, ориентир 70–100 тыс. км или при замене колодок',
+  },
+  {
+    id: 'cv_boot',
+    label: 'ШРУС / пыльники',
+    normKm: 80000,
+    kind: 'wear',
+    keywords: ['шрус', 'пыльник шрус', 'гранат шрус'],
+    recommendation: 'Осмотр каждые 80 тыс. км, замена при трещинах пыльника',
+  },
+  {
+    id: 'silent_block',
+    label: 'Сайлентблоки',
+    normKm: 80000,
+    kind: 'wear',
+    keywords: ['сайлентблок', 'сайлент-блок'],
+    recommendation: 'По состоянию, ориентир 80–120 тыс. км',
   },
   {
     id: 'stabilizer_link',
@@ -64,6 +158,7 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
       'тяга/стойка стабилизатора',
       'clo460',
     ],
+    recommendation: 'По состоянию, ориентир 50–80 тыс. км',
   },
   {
     id: 'stabilizer_bush',
@@ -71,6 +166,7 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 60000,
     kind: 'wear',
     keywords: ['втулка стабилизатора', 'втулка заднего стабилизатора', 'втулка переднего стабилизатора'],
+    recommendation: 'По состоянию, ориентир 60–80 тыс. км',
   },
   {
     id: 'shock_front',
@@ -78,6 +174,7 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 80000,
     kind: 'wear',
     keywords: ['амортизатор передний', 'амортизаторы передней', 'dg11075', 'dg21075'],
+    recommendation: 'По состоянию, ориентир 80–100 тыс. км',
   },
   {
     id: 'shock_rear',
@@ -85,6 +182,7 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 80000,
     kind: 'wear',
     keywords: ['амортизатор задний', 'dg02181'],
+    recommendation: 'По состоянию, ориентир 80–100 тыс. км',
   },
   {
     id: 'ball_joint',
@@ -92,6 +190,7 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 80000,
     kind: 'wear',
     keywords: ['шаровая опора', 'sb-4942'],
+    recommendation: 'По состоянию и люфтам, ориентир 80–120 тыс. км',
   },
   {
     id: 'hub_bearing',
@@ -99,6 +198,15 @@ export const MAINTENANCE_INTERVALS: MaintenanceInterval[] = [
     normKm: 100000,
     kind: 'wear',
     keywords: ['ступиц', 'подшипник передней', 'подшипник ступичный', 'wh1196', 'db83006'],
+    recommendation: 'По шуму и люфту, ориентир 100–150 тыс. км',
+  },
+  {
+    id: 'engine_mount',
+    label: 'Опоры двигателя / КПП',
+    normKm: 150000,
+    kind: 'wear',
+    keywords: ['опора двигателя', 'опора кпп', 'опора мотора', 'подушка двигателя'],
+    recommendation: 'По состоянию, ориентир 150 тыс. км — возможны разрывы',
   },
 ]
 
