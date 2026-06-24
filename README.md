@@ -23,6 +23,18 @@ npm run dev
 npm run build
 ```
 
+## GitHub Pages
+
+Приложение публикуется автоматически при пуше в `main`.
+
+Сайт: https://wolandrtf.github.io/car-info/
+
+Локальная проверка сборки для Pages:
+
+```bash
+GITHUB_PAGES=true npm run build && npm run preview
+```
+
 ## Данные
 
 История обслуживания хранится в `src/data/car-history.json`.
