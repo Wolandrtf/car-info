@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1e40af;
+  --color-surface: #f8fafc;
+  --color-card: #ffffff;
+  --color-muted: #64748b;
+  --font-mono: ui-monospace, "JetBrains Mono", monospace;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
