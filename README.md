@@ -39,4 +39,4 @@ GITHUB_PAGES=true npm run build && npm run preview
 
 ## Данные
 
-История обслуживания хранится в `src/data/car-history.json`.
+История обслуживания хранится в `src/data/src.json`.

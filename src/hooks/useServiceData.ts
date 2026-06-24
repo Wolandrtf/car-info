@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import carHistory from '../data/car-history.json'
+import carHistory from '../data/src.json'
 import type { CarHistoryData, PartReplacementHistory, ServiceVisit } from '../types'
 import { buildPartHistory, groupDocumentsByDate } from '../utils/groupByDate'
 import { analyzeIntervals } from '../utils/intervalAnalysis'
