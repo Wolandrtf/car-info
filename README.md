@@ -35,6 +35,8 @@ npm run build
 GITHUB_PAGES=true npm run build && npm run preview
 ```
 
+Требуется Node.js 24+.
+
 ## Данные
 
 История обслуживания хранится в `src/data/car-history.json`.
