@@ -104,6 +104,7 @@ export interface UnifiedPart {
 
 export interface ServiceVisit {
   date: string
+  dateFormattedShort: string
   organizations: string[]
   documents: Document[]
   totalAmount: number

@@ -15,6 +15,7 @@ interface SummaryDashboardProps {
   yearlySpending: YearlySpending[]
   mileageEntries: MileageEntry[]
   categorySpending: CategorySpending[]
+  partsWithoutPriceCount: number
   onDateClick?: (date: string) => void
 }
 
@@ -25,6 +26,7 @@ export function SummaryDashboard({
   yearlySpending,
   mileageEntries,
   categorySpending,
+  partsWithoutPriceCount,
   onDateClick,
 }: SummaryDashboardProps) {
   const maxYearAmount = Math.max(...yearlySpending.map((item) => item.amount), 1)
@@ -122,7 +124,14 @@ export function SummaryDashboard({
       </section>
 
       <section className="rounded-xl border border-slate-200 bg-card p-4 shadow-sm md:p-5">
-        <h3 className="text-lg font-semibold text-slate-900">Топ категорий запчастей</h3>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <h3 className="text-lg font-semibold text-slate-900">Топ категорий запчастей</h3>
+          {partsWithoutPriceCount > 0 && (
+            <p className="text-sm text-amber-700">
+              Без цены в чеках: {partsWithoutPriceCount} поз.
+            </p>
+          )}
+        </div>
         <div className="mt-4 space-y-3">
           {categorySpending.slice(0, 6).map((item) => (
             <div

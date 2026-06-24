@@ -1,17 +1,19 @@
 import { useMemo } from 'react'
 import carHistory from '../data/src.json'
-import type { CarHistoryData, PartReplacementHistory, ServiceVisit } from '../types'
+import type { ServiceVisit } from '../types'
 import { buildPartHistory, groupDocumentsByDate } from '../utils/groupByDate'
 import { analyzeIntervals } from '../utils/intervalAnalysis'
 import {
+  countPartsWithoutPrice,
   getCategorySpending,
   getMileageEntries,
   getOrganizationStats,
   getTotalSpending,
   getYearlySpending,
 } from '../utils/stats'
+import { parseCarHistoryData } from '../utils/validateData'
 
-const data = carHistory as CarHistoryData
+const data = parseCarHistoryData(carHistory)
 
 export function useServiceData() {
   const visits = useMemo(() => groupDocumentsByDate(data), [])
@@ -20,6 +22,7 @@ export function useServiceData() {
   const yearlySpending = useMemo(() => getYearlySpending(visits), [visits])
   const mileageEntries = useMemo(() => getMileageEntries(visits), [visits])
   const categorySpending = useMemo(() => getCategorySpending(visits), [visits])
+  const partsWithoutPriceCount = useMemo(() => countPartsWithoutPrice(visits), [visits])
   const totalSpending = useMemo(() => getTotalSpending(visits), [visits])
   const intervalAnalysis = useMemo(() => analyzeIntervals(data), [])
 
@@ -43,6 +46,7 @@ export function useServiceData() {
     yearlySpending,
     mileageEntries,
     categorySpending,
+    partsWithoutPriceCount,
     totalSpending,
     organizationsList,
     intervalAnalysis,
@@ -70,6 +74,7 @@ export function filterVisits(
       !query ||
       visit.date === query ||
       visit.date.includes(query) ||
+      visit.dateFormattedShort.toLowerCase().includes(query) ||
       visit.organizations.some((org) => org.toLowerCase().includes(query)) ||
       visit.works.some((work) => work.name.toLowerCase().includes(query)) ||
       visit.parts.some((part) => part.name.toLowerCase().includes(query)) ||
@@ -77,18 +82,4 @@ export function filterVisits(
 
     return matchesOrganization && matchesCategory && matchesSearch
   })
-}
-
-export function groupPartHistoryByCategory(
-  partHistory: PartReplacementHistory[],
-): Map<string, PartReplacementHistory[]> {
-  const map = new Map<string, PartReplacementHistory[]>()
-
-  for (const item of partHistory) {
-    const existing = map.get(item.category) ?? []
-    existing.push(item)
-    map.set(item.category, existing)
-  }
-
-  return map
 }

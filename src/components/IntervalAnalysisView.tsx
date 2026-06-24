@@ -5,6 +5,7 @@ import { cn } from '../utils/cn'
 import { formatDateShort, formatMileage } from '../utils/formatters'
 
 interface IntervalAnalysisViewProps {
+  vehicleLabel: string
   timelines: PartTypeTimeline[]
   earlyWear: IntervalComparison[]
   earlyPlanned: IntervalComparison[]
@@ -100,10 +101,10 @@ function TimelineSection({ timeline }: { timeline: PartTypeTimeline }) {
       <div className="space-y-4">
         <ol className="space-y-2">
           {timeline.events.map((event, index) => {
-            const comparison = timeline.comparisons[index]
+            const comparison = index > 0 ? timeline.comparisons[index - 1] : undefined
             return (
               <li
-                key={`${event.date}-${event.documentNumber}-${event.name}`}
+                key={`${event.date}-${event.documentNumber}-${event.name}-${index}`}
                 className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -158,6 +159,7 @@ function TimelineSection({ timeline }: { timeline: PartTypeTimeline }) {
 }
 
 export function IntervalAnalysisView({
+  vehicleLabel,
   timelines,
   earlyWear,
   earlyPlanned,
@@ -167,7 +169,7 @@ export function IntervalAnalysisView({
     <div className="space-y-6">
       <section className="rounded-xl border border-slate-200 bg-card p-4 text-sm text-slate-600 shadow-sm md:p-5">
         <p>
-          Сравниваем интервалы между заменами с ориентировочными нормами для Nissan Qashqai.
+          Сравниваем интервалы между заменами с ориентировочными нормами для {vehicleLabel}.
           Пробег на датах без заказ-наряда оценивается по соседним точкам.
         </p>
         <p className="mt-2">
@@ -229,6 +231,22 @@ export function IntervalAnalysisView({
                   comparison={comparison}
                 />
               ))}
+          </div>
+        </Accordion>
+      )}
+
+      {duplicates.length > 0 && (
+        <Accordion
+          title="Дубли в данных"
+          subtitle={`${duplicates.length} случаев`}
+        >
+          <div className="space-y-3">
+            {duplicates.map((comparison) => (
+              <ComparisonCard
+                key={`dup-${comparison.current.date}-${comparison.label}-${comparison.prev.date}`}
+                comparison={comparison}
+              />
+            ))}
           </div>
         </Accordion>
       )}

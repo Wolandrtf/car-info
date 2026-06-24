@@ -1,4 +1,5 @@
 import { categorizePart, getPartLabel } from './categorizeParts'
+import { formatDateShort } from './formatters'
 import type {
   CarHistoryData,
   Document,
@@ -75,6 +76,7 @@ export function groupDocumentsByDate(data: CarHistoryData): ServiceVisit[] {
     } else {
       visitsMap.set(document.date, {
         date: document.date,
+        dateFormattedShort: formatDateShort(document.date),
         organizations: [document.supplier],
         documents: [document],
         totalAmount: document.total,

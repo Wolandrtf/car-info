@@ -23,6 +23,12 @@ npm run dev
 npm run build
 ```
 
+## Тесты
+
+```bash
+npm test
+```
+
 ## GitHub Pages
 
 Приложение публикуется автоматически при пуше в `main`.
@@ -35,8 +41,21 @@ npm run build
 GITHUB_PAGES=true npm run build && npm run preview
 ```
 
-Требуется Node.js 24+.
+Требуется Node.js 24+ (см. `.nvmrc` и `engines` в `package.json`).
 
 ## Данные
 
-История обслуживания хранится в `src/data/src.json`.
+История обслуживания хранится в `src/data/src.json`. Шаблон и схема — в `docs/`.
+
+### Конфиденциальность
+
+Файл `src/data/src.json` попадает в клиентский бандл целиком: VIN, госномер, ИНН организаций и ФИО исполнителей будут видны всем посетителям при публикации на GitHub Pages.
+
+Для публичного деплоя:
+
+1. Не коммитьте реальные персональные данные — используйте `docs/car-history.template.json`.
+2. При сборке для публикации можно скрыть VIN и госномер в интерфейсе:
+
+```bash
+VITE_MASK_PERSONAL_DATA=true npm run build
+```

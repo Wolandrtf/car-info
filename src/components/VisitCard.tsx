@@ -51,9 +51,9 @@ export function VisitCard({ visit }: VisitCardProps) {
             <section>
               <h4 className="mb-2 text-sm font-semibold text-slate-900">Работы</h4>
               <ul className="space-y-2">
-                {visit.works.map((work) => (
+                {visit.works.map((work, index) => (
                   <li
-                    key={`${work.documentNumber}-${work.name}`}
+                    key={`${work.documentNumber}-${work.name}-${index}`}
                     className="flex flex-wrap items-start justify-between gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm"
                   >
                     <div>
@@ -78,9 +78,9 @@ export function VisitCard({ visit }: VisitCardProps) {
             <section>
               <h4 className="mb-2 text-sm font-semibold text-slate-900">Запчасти</h4>
               <ul className="space-y-2">
-                {visit.parts.map((part) => (
+                {visit.parts.map((part, index) => (
                   <li
-                    key={`${part.documentNumber}-${part.name}`}
+                    key={`${part.documentNumber}-${part.name}-${index}`}
                     className="flex flex-wrap items-start justify-between gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm"
                   >
                     <div className="space-y-1">

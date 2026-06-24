@@ -6,6 +6,7 @@ import type {
   ServiceVisit,
   YearlySpending,
 } from '../types'
+import { getPartLineAmount } from './partAmount'
 
 export function getTotalSpending(visits: ServiceVisit[]): number {
   return visits.reduce((sum, visit) => sum + visit.totalAmount, 0)
@@ -70,12 +71,19 @@ export function getOrganizationStats(visits: ServiceVisit[]): OrganizationStats[
     .sort((a, b) => b.totalAmount - a.totalAmount)
 }
 
+export function countPartsWithoutPrice(visits: ServiceVisit[]): number {
+  return visits.reduce(
+    (count, visit) => count + visit.parts.filter((part) => part.price == null).length,
+    0,
+  )
+}
+
 export function getCategorySpending(visits: ServiceVisit[]): CategorySpending[] {
   const map = new Map<PartCategory, CategorySpending>()
 
   for (const visit of visits) {
     for (const part of visit.parts) {
-      const amount = (part.price ?? 0) * part.quantity
+      const amount = getPartLineAmount(part)
       const existing = map.get(part.category)
 
       if (existing) {

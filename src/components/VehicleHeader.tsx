@@ -1,5 +1,6 @@
 import type { VehicleInfo } from '../types'
 import { formatDateShort } from '../utils/formatters'
+import { maskLicensePlate, maskVin } from '../utils/maskPersonal'
 
 interface VehicleHeaderProps {
   vehicle: VehicleInfo
@@ -14,12 +15,12 @@ export function VehicleHeader({ vehicle, dateRange }: VehicleHeaderProps) {
           История обслуживания
         </p>
         <h1 className="mt-1 text-2xl font-semibold text-slate-900">
-          {vehicle.make} · {vehicle.license_plate}
+          {vehicle.make} · {maskLicensePlate(vehicle.license_plate)}
         </h1>
         <p className="mt-1 text-sm text-muted">{vehicle.model}</p>
         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-600">
           <span>Год: {vehicle.year}</span>
-          <span className="font-mono text-xs text-slate-500">VIN: {vehicle.vin}</span>
+          <span className="font-mono text-xs text-slate-500">VIN: {maskVin(vehicle.vin)}</span>
           <span>
             Период: {formatDateShort(dateRange.from)} — {formatDateShort(dateRange.to)}
           </span>

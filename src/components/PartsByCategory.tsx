@@ -1,6 +1,6 @@
 import type { PartReplacementHistory } from '../types'
 import { CATEGORY_LABELS } from '../constants/categoryColors'
-import { groupPartHistoryByCategory } from '../hooks/useServiceData'
+import { groupPartHistoryByCategory } from '../utils/groupPartHistory'
 import { Accordion } from './ui/Accordion'
 import { formatCurrency, formatDateShort } from '../utils/formatters'
 
